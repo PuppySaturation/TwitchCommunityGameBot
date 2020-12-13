@@ -70,6 +70,7 @@ function on_whisper(channel, userstate, message, self){
 	<input type='text' id='username' name='username'><br>
 	<label for='password'>password:</label>
 	<input type='text' id='password' name='password'><br>
-	<button type='button' onclick='connect_to_channel'>Connect</button><br>
+	<button type='button' onclick='connect_to_channel()'>Connect</button><br>
+	<button type='button' onclick='client.disconnect()'>Disconnect</button><br>
     </body>
 </html> 
