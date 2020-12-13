@@ -3,26 +3,73 @@
     <head>
 	<title>Twitch Community Games Bot</title>
 	<script src="tmi.min.js"></script>
+	<script src="conf.js"></script>
 
 	<script>
 
-const client = new tmi.Client({
-    options: {debug: true, messagesLogLevel: "info" },
-    connection: {reconnect: true, secure: true},
-    identity: {
-	username: '<username>',
-	password: '<password>'
-    },
-    channels: [ 'grathwrang' ]
-});
-client.connect().catch(console.error);
+let client;
+function connect_to_channel() {
+    username_input = document.getElementById('username');
+    password_input = document.getElementById('password');
+    username = username_input.value;
+    password = password_input.value;
 
-client.on('message', (channel, tags, message, self) => {
-    //console.log(channel, tags, message, self);
-    console.log(tags['display-name'] + ' -> ' + message);
+    client = new tmi.Client({
+	options: {debug: true, messagesLogLevel: "info" },
+	connection: {reconnect: true, secure: true},
+	identity: {
+	    username: username,
+	    password: password
+	},
+	channels: conf.channels
+    });
+    client.connect().catch(console.error);
+    client.on('chat', on_chat);
+    client.on('action', on_action);
+    client.on('whipser', on_whisper);
+}
+
+window.addEventListener('load', function(){
+    username_input = document.getElementById('username');
+    password_input = document.getElementById('password');
+    username_input.value=conf.username;
+    password_input.value=conf.password;
 });
+
+function on_chat(channel, userstate, message, self){
+    //'nightbot', '19264788'
+    //'streamelements', ''
+    message_pattern = new RegExp('^([a-zA-Z0-9_]+) has won the giveaway.$')
+
+    // find messages that match the give away, extract username
+    console.log(userstate, message);
+
+    // message comes from nightbot?
+    // if userstate['user-id'] ==
+    if(userstate['username'] == 'nightbot') {
+	match = message.match(message_pattern);
+	if(match !== null){
+	    username = match[1];
+	}
+    }
+    if(userstate['username'] == 'streamelements') {
+    }
+}
+function on_action(channel, userstate, message, self){
+    // respond to action commands
+}
+function on_whisper(channel, userstate, message, self){
+    // relay whispers to other winners of give away
+}
+
 	</script>
     </head>
     <body>
+	<h2> Config </h2>
+	<label for='username'>username:</label>
+	<input type='text' id='username' name='username'><br>
+	<label for='password'>password:</label>
+	<input type='text' id='password' name='password'><br>
+	<button type='button' onclick='connect_to_channel'>Connect</button><br>
     </body>
 </html> 
