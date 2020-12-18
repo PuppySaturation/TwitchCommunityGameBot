@@ -15,13 +15,13 @@
 	</style>
 
 	<script>
-
-let client;
+"use strict";
+var client;
 function connect_to_channel() {
-    username_input = document.getElementById('username');
-    password_input = document.getElementById('password');
-    username = username_input.value;
-    password = password_input.value;
+    var username_input = document.getElementById('username');
+    var password_input = document.getElementById('password');
+    var username = username_input.value;
+    var password = password_input.value;
 
     client = new tmi.Client({
 	options: {debug: false, messagesLogLevel: "info" },
@@ -39,8 +39,8 @@ function connect_to_channel() {
 }
 
 window.addEventListener('load', function(){
-    username_input = document.getElementById('username');
-    password_input = document.getElementById('password');
+    var username_input = document.getElementById('username');
+    var password_input = document.getElementById('password');
     username_input.value=conf.username;
     password_input.value=conf.password;
 });
@@ -48,8 +48,8 @@ window.addEventListener('load', function(){
 function on_chat(channel, userstate, message, self){
     //'nightbot', '19264788'
     //'streamelements', ''
-    aoe2de_pattern = new RegExp('aoe2de:\/\/\\d\/\\d+');
-    message_pattern = new RegExp('^([a-zA-Z0-9_]+) has won the giveaway.$');
+    var aoe2de_pattern = new RegExp('aoe2de:\/\/\\d\/\\d+');
+    var message_pattern = new RegExp('^([a-zA-Z0-9_]+) has won the giveaway.$');
 
     // find messages that match the give away, extract username
     //console.log(userstate, message);
@@ -59,9 +59,9 @@ function on_chat(channel, userstate, message, self){
     // message comes from nightbot?
     // if userstate['user-id'] ==
     if(userstate['username'] == 'nightbot') {
-	match = message.match(message_pattern);
+	var match = message.match(message_pattern);
 	if(match !== null){
-	    username = match[1];
+	    var username = match[1];
 	    console.log(username+' WON!!!');
 	    add_username_to_list(username);
 	}
@@ -93,9 +93,9 @@ function add_username_to_list(username){
 }
 
 function clear_usernames(){
-    usernames_list_div = document.getElementById('usernames_list');
+    var usernames_list_div = document.getElementById('usernames_list');
     
-    usernames_list = Array.from(usernames_list_div.childNodes);
+    var usernames_list = Array.from(usernames_list_div.childNodes);
     usernames_list.forEach((child_node, index)=>{
 	usernames_list_div.removeChild(child_node);
     });
