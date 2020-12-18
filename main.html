@@ -12,10 +12,37 @@
 .selected { 
     background-color: lightblue;
 }
+.whispers_display {
+    border:1px black solid;
+    width:200px;
+    height:300px;
+    overflow:auto;
+    float:left;
+    padding-left: 4px;
+    margin:5px;
+}
+#whisper_textbox{
+    border:1px black solid;
+    width:300px;
+    height:100px;
+    overflow:auto;
+    float:left;
+    padding:4px;
+    margin:5px;
+}
+#usernames_list {
+    border:1px black solid;
+    width:300px;
+    height:100px;
+    overflow:auto;
+    float:left;
+    padding:4px;
+    margin:5px;
+}
 	</style>
 
 	<script>
-"use strict";
+	    "use strict";
 var client;
 function connect_to_channel() {
     var username_input = document.getElementById('username');
@@ -78,15 +105,15 @@ function on_chat(channel, userstate, message, self){
     // add_username_to_list(userstate['username']);
 
     // message comes from nightbot?
-    // if userstate['user-id'] ==
-    if(userstate['username'] == 'nightbot') {
-	var match = message.match(message_pattern);
-	if(match !== null){
-	    var username = match[1];
-	    console.log(username+' WON!!!');
-	    add_username_to_list(username);
+	// if userstate['user-id'] ==
+	if(userstate['username'] == 'nightbot') {
+	    var match = message.match(message_pattern);
+	    if(match !== null){
+		var username = match[1];
+		console.log(username+' WON!!!');
+		add_username_to_list(username);
+	    }
 	}
-    }
     if(userstate['username'] == 'streamelements') {
     }
 }
@@ -115,7 +142,7 @@ function add_username_to_list(username){
 
 function clear_usernames(){
     var usernames_list_div = document.getElementById('usernames_list');
-    
+
     var usernames_list = Array.from(usernames_list_div.childNodes);
     usernames_list.forEach((child_node, index)=>{
 	usernames_list_div.removeChild(child_node);
@@ -143,26 +170,28 @@ function whisper_to_selected(){
 	<label for='username'>username:</label>
 	<input type='text' id='username' name='username'><br>
 	<label for='password'>password:</label>
-	<input type='text' id='password' name='password'><br>
+	<input type='password' id='password' name='password'><br>
 	<p id='status_display'>status: </p>
 	<button type='button' onclick='connect_to_channel()'>Connect</button><br>
 	<button type='button' onclick='disconnect_from_channel()'>Disconnect</button><br>
 	<h2>Whisper to</h2>
-	<div id='whisper_textbox' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding-left:4px; margin:5px;' contenteditable='true'></div>
+	<div id='whisper_textbox' contenteditable='true'></div>
 
-	<div id='usernames_list' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding:4px; margin:5px;'>
+	<div id='usernames_list'>
 	</div>
 
 	<div style='height:100px; margin:5px; padding:4px'>
-	<button type='button' onclick='clear_usernames()'>Clear list</button><br>
-	<button type='button' onclick='whisper_to_selected()'>Whisper</button><br>
+	    <button type='button' onclick='clear_usernames()'>Clear list</button><br>
+	    <button type='button' onclick='whisper_to_selected()'>Whisper</button><br>
 	</div>
 
 	<h2>Whispers</h2>
-	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
-	    <p><b>User: </b>Text of the whisper.</p>
-	    <p>Next line.</p>
+	<div id='whispers_table'>
+	    <div class='whispers_display'>
+		<p><b>User: </b>Text of the whisper.</p>
+		<p>Next line.</p>
+	    </div>
 	</div>
-	
+
     </body>
 </html> 
