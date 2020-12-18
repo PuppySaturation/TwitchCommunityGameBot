@@ -15,7 +15,7 @@ function connect_to_channel() {
     password = password_input.value;
 
     client = new tmi.Client({
-	options: {debug: true, messagesLogLevel: "info" },
+	options: {debug: false, messagesLogLevel: "info" },
 	connection: {reconnect: true, secure: true},
 	identity: {
 	    username: username,
@@ -39,10 +39,11 @@ window.addEventListener('load', function(){
 function on_chat(channel, userstate, message, self){
     //'nightbot', '19264788'
     //'streamelements', ''
-    message_pattern = new RegExp('^([a-zA-Z0-9_]+) has won the giveaway.$')
+    aoe2de_pattern = new RegExp('aoe2de:\/\/\\d\/\\d+');
+    message_pattern = new RegExp('^([a-zA-Z0-9_]+) has won the giveaway.$');
 
     // find messages that match the give away, extract username
-    console.log(userstate, message);
+    //console.log(userstate, message);
 
     // message comes from nightbot?
     // if userstate['user-id'] ==
@@ -50,6 +51,8 @@ function on_chat(channel, userstate, message, self){
 	match = message.match(message_pattern);
 	if(match !== null){
 	    username = match[1];
+	    console.log(username+' WON!!!');
+	    add_username_to_list(username);
 	}
     }
     if(userstate['username'] == 'streamelements') {
@@ -62,6 +65,24 @@ function on_whisper(channel, userstate, message, self){
     // relay whispers to other winners of give away
 }
 
+function add_username_to_list(username){
+    usernames_list_div = document.getElementById('usernames_list');
+    new_username_div = document.createElement('div');
+    new_username_div.className = 'username_entry';
+    username_text_node = document.createTextNode(username);
+    new_username_div.append(username_text_node);
+    usernames_list_div.appendChild(new_username_div);
+}
+
+function clear_usernames(){
+    usernames_list_div = document.getElementById('usernames_list');
+    
+    usernames_list = Array.from(usernames_list_div.childNodes);
+    usernames_list.forEach((child_node, index)=>{
+	usernames_list_div.removeChild(child_node);
+    });
+}
+
 	</script>
     </head>
     <body>
@@ -72,5 +93,34 @@ function on_whisper(channel, userstate, message, self){
 	<input type='text' id='password' name='password'><br>
 	<button type='button' onclick='connect_to_channel()'>Connect</button><br>
 	<button type='button' onclick='client.disconnect()'>Disconnect</button><br>
+	<h2>Whisper to</h2>
+	<div style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding-left:4px; margin:5px;' contenteditable='true'></div>
+
+	<div id='usernames_list' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding:4px; margin:5px;'>
+	</div>
+
+	<div>
+	<button type='button' onclick='clear_usernames()'>Clear list</button><br>
+	<button type='button'>Whisper all</button><br>
+	</div>
+
+	<h2>Whispers</h2>
+	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
+	    <p><b>User: </b>Text of the whisper.</p>
+	    <p>Next line.</p>
+	</div>
+	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
+	    Another box of text.
+	</div>
+	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
+	    Another box of text.
+	</div>
+	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
+	    Another box of text.
+	</div>
+	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
+	    Another box of text.
+	</div>
+	
     </body>
 </html> 
