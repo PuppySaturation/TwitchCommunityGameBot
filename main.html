@@ -77,12 +77,12 @@ function on_whisper(channel, userstate, message, self){
 }
 
 function add_username_to_list(username){
-    usernames_list_div = document.getElementById('usernames_list');
+    var usernames_list_div = document.getElementById('usernames_list');
 
-    new_username_div = document.createElement('div');
+    var new_username_div = document.createElement('div');
     new_username_div.classList.add('username_entry');
     new_username_div.classList.add('selected');
-    username_text_node = document.createTextNode(username);
+    var username_text_node = document.createTextNode(username);
     new_username_div.append(username_text_node);
 
     new_username_div.onclick = ()=>{
@@ -99,6 +99,20 @@ function clear_usernames(){
     usernames_list.forEach((child_node, index)=>{
 	usernames_list_div.removeChild(child_node);
     });
+}
+
+function whisper_to_selected(){
+    var whisper_tb = document.getElementById('whisper_textbox');
+    var whisper_msg = whisper_tb.childNodes[0].textContent; 
+
+    var sel_usernames_list = Array.from(document.getElementsByClassName('username_entry selected'));
+
+    sel_usernames_list.forEach((username_div, index)=>{
+	username = username_div.childNodes[0].textContent;
+	client.whisper(username, whisper_msg);
+
+    });
+
 }
 
 	</script>
@@ -119,7 +133,7 @@ function clear_usernames(){
 
 	<div style='height:100px; margin:5px; padding:4px'>
 	<button type='button' onclick='clear_usernames()'>Clear list</button><br>
-	<button type='button'>Whisper</button><br>
+	<button type='button' onclick='whisper_to_selected()'>Whisper</button><br>
 	</div>
 
 	<h2>Whispers</h2>
