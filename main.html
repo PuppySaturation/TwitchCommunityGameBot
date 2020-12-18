@@ -32,11 +32,32 @@ function connect_to_channel() {
 	},
 	channels: conf.channels
     });
-    client.connect().catch(console.error);
+
+    var stat_disp = document.getElementById('status_display')
+    client.connect()
+	.then((data) => {
+	    stat_disp.childNodes[0].textContent = 'status: connected';
+	})
+	.catch((err) => {
+	    stat_disp.childNodes[0].textContent = 'status: ERROR connecting';
+	    console.log(err);
+	});
     client.on('chat', on_chat);
     client.on('action', on_action);
     client.on('whipser', on_whisper);
 }
+
+function disconnect_from_channel(){
+    var stat_disp = document.getElementById('status_display')
+    client.disconnect()
+	.then((data) => {
+	    stat_disp.childNodes[0].textContent = 'status: ';
+	})
+	.catch((err) => {
+	    stat_disp.childNodes[0].textContent = 'status: ERROR disconnecting';
+	    console.log(err);
+	})
+};
 
 window.addEventListener('load', function(){
     var username_input = document.getElementById('username');
@@ -123,8 +144,9 @@ function whisper_to_selected(){
 	<input type='text' id='username' name='username'><br>
 	<label for='password'>password:</label>
 	<input type='text' id='password' name='password'><br>
+	<p id='status_display'>status: </p>
 	<button type='button' onclick='connect_to_channel()'>Connect</button><br>
-	<button type='button' onclick='client.disconnect()'>Disconnect</button><br>
+	<button type='button' onclick='disconnect_from_channel()'>Disconnect</button><br>
 	<h2>Whisper to</h2>
 	<div id='whisper_textbox' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding-left:4px; margin:5px;' contenteditable='true'></div>
 
