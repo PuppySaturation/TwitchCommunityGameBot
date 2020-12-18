@@ -4,6 +4,15 @@
 	<title>Twitch Community Games Bot</title>
 	<script src="tmi.min.js"></script>
 	<script src="conf.js"></script>
+	<style>
+.username_entry {
+    -webkit-user-select: none;
+    margin-bottom: 5px;
+}
+.selected { 
+    background-color: lightblue;
+}
+	</style>
 
 	<script>
 
@@ -45,6 +54,8 @@ function on_chat(channel, userstate, message, self){
     // find messages that match the give away, extract username
     //console.log(userstate, message);
 
+    // add_username_to_list(userstate['username']);
+
     // message comes from nightbot?
     // if userstate['user-id'] ==
     if(userstate['username'] == 'nightbot') {
@@ -67,10 +78,17 @@ function on_whisper(channel, userstate, message, self){
 
 function add_username_to_list(username){
     usernames_list_div = document.getElementById('usernames_list');
+
     new_username_div = document.createElement('div');
-    new_username_div.className = 'username_entry';
+    new_username_div.classList.add('username_entry');
+    new_username_div.classList.add('selected');
     username_text_node = document.createTextNode(username);
     new_username_div.append(username_text_node);
+
+    new_username_div.onclick = ()=>{
+	new_username_div.classList.toggle('selected');
+    };
+
     usernames_list_div.appendChild(new_username_div);
 }
 
@@ -94,32 +112,20 @@ function clear_usernames(){
 	<button type='button' onclick='connect_to_channel()'>Connect</button><br>
 	<button type='button' onclick='client.disconnect()'>Disconnect</button><br>
 	<h2>Whisper to</h2>
-	<div style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding-left:4px; margin:5px;' contenteditable='true'></div>
+	<div id='whisper_textbox' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding-left:4px; margin:5px;' contenteditable='true'></div>
 
 	<div id='usernames_list' style='border:1px black solid; width:300px; height:100px; overflow:auto; float:left; padding:4px; margin:5px;'>
 	</div>
 
-	<div>
+	<div style='height:100px; margin:5px; padding:4px'>
 	<button type='button' onclick='clear_usernames()'>Clear list</button><br>
-	<button type='button'>Whisper all</button><br>
+	<button type='button'>Whisper</button><br>
 	</div>
 
 	<h2>Whispers</h2>
 	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
 	    <p><b>User: </b>Text of the whisper.</p>
 	    <p>Next line.</p>
-	</div>
-	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
-	    Another box of text.
-	</div>
-	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
-	    Another box of text.
-	</div>
-	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
-	    Another box of text.
-	</div>
-	<div style='border:1px black solid; width:200px; height:300px; overflow:auto; float:left; padding-left: 4px; margin:5px'>
-	    Another box of text.
 	</div>
 	
     </body>
